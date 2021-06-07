@@ -1,21 +1,25 @@
 package com.example.mobile_security_project.screens;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mobile_security_project.R;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.HashMap;
+import java.util.Objects;
 
-/**
- * Created by Akshay Raj on 6/16/2016.
- * akshay@snowcorp.org
- * www.snowcorp.org
- */
 
 public class HomeActivity extends AppCompatActivity {
     private static final String TAG = HomeActivity.class.getSimpleName();
@@ -56,77 +60,77 @@ public class HomeActivity extends AppCompatActivity {
         // Hide Keyboard
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-//        init();
+        init();
     }
 
-//    private void init() {
+    private void init() {
 //        btnLogout.setOnClickListener(v -> logoutUser());
-//
-//        btnChangePass.setOnClickListener(v -> {
-//            final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(HomeActivity.this);
-//            LayoutInflater inflater = getLayoutInflater();
-//            View dialogView = inflater.inflate(R.layout.change_password, null);
-//
-//            dialogBuilder.setView(dialogView);
-//            dialogBuilder.setTitle("Change Password");
-//            dialogBuilder.setCancelable(false);
-//
-//            final TextInputLayout oldPassword = dialogView.findViewById(R.id.old_password);
-//            final TextInputLayout newPassword = dialogView.findViewById(R.id.new_password);
-//
-//            dialogBuilder.setPositiveButton("Change", (dialog, which) -> {
-//                // empty
-//            });
-//
-//            dialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
-//
-//            final AlertDialog alertDialog = dialogBuilder.create();
-//
-//            TextWatcher textWatcher = new TextWatcher() {
-//                @Override
-//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//                }
-//
-//                @Override
-//                public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                    if(Objects.requireNonNull(oldPassword.getEditText()).getText().length() > 0 &&
-//                            Objects.requireNonNull(newPassword.getEditText()).getText().length() > 0){
-//                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-//                    } else {
-//                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-//                    }
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable s) {
-//                }
-//            };
-//
-//            Objects.requireNonNull(oldPassword.getEditText()).addTextChangedListener(textWatcher);
-//            Objects.requireNonNull(newPassword.getEditText()).addTextChangedListener(textWatcher);
-//
-//            alertDialog.setOnShowListener(dialog -> {
-//                final Button b = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-//                b.setEnabled(false);
-//
-//                b.setOnClickListener(view -> {
-//                    String email = user.get("email");
-//                    String old_pass = oldPassword.getEditText().getText().toString();
-//                    String new_pass = newPassword.getEditText().getText().toString();
-//
-//                    if (!old_pass.isEmpty() && !new_pass.isEmpty()) {
+
+        btnChangePass.setOnClickListener(v -> {
+            final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+            LayoutInflater inflater = getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.change_password, null);
+
+            dialogBuilder.setView(dialogView);
+            dialogBuilder.setTitle("Change Password");
+            dialogBuilder.setCancelable(false);
+
+            final TextInputLayout oldPassword = dialogView.findViewById(R.id.old_password);
+            final TextInputLayout newPassword = dialogView.findViewById(R.id.new_password);
+
+            dialogBuilder.setPositiveButton("Change", (dialog, which) -> {
+                // empty
+            });
+
+            dialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+            final AlertDialog alertDialog = dialogBuilder.create();
+
+            TextWatcher textWatcher = new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if(Objects.requireNonNull(oldPassword.getEditText()).getText().length() > 0 &&
+                            Objects.requireNonNull(newPassword.getEditText()).getText().length() > 0){
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                    } else {
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                }
+            };
+
+            Objects.requireNonNull(oldPassword.getEditText()).addTextChangedListener(textWatcher);
+            Objects.requireNonNull(newPassword.getEditText()).addTextChangedListener(textWatcher);
+
+            alertDialog.setOnShowListener(dialog -> {
+                final Button b = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setEnabled(false);
+
+                b.setOnClickListener(view -> {
+                    String email = user.get("email");
+                    String old_pass = oldPassword.getEditText().getText().toString();
+                    String new_pass = newPassword.getEditText().getText().toString();
+
+                    if (!old_pass.isEmpty() && !new_pass.isEmpty()) {
 //                        changePassword(email, old_pass, new_pass);
-//                        dialog.dismiss();
-//                    } else {
-//                        Toast.makeText(HomeActivity.this, "Fill all values!", Toast.LENGTH_SHORT).show();
-//                    }
-//
-//                });
-//            });
-//
-//            alertDialog.show();
-//        });
-//    }
+                        dialog.dismiss();
+                    } else {
+                        Toast.makeText(HomeActivity.this, "Fill all values!", Toast.LENGTH_SHORT).show();
+                    }
+
+                });
+            });
+
+            alertDialog.show();
+        });
+    }
 
 //    private void logoutUser() {
 //        session.setLogin(false);

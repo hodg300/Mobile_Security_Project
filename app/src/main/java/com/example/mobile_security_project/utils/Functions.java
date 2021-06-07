@@ -10,11 +10,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 
-/**
- * Created by Akshay Raj on 06-02-2017.
- * akshay@snowcorp.org
- * www.snowcorp.org
- */
 
 public class Functions {
 

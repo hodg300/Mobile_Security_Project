@@ -1,19 +1,24 @@
 package com.example.mobile_security_project.screens;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mobile_security_project.R;
+import com.example.mobile_security_project.utils.Functions;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
-/**
- * Created by Akshay Raj on 6/16/2016.
- * akshay@snowcorp.org
- * www.snowcorp.org
- */
+import java.util.Objects;
+
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = LoginActivity.class.getSimpleName();
@@ -56,96 +61,102 @@ public class LoginActivity extends AppCompatActivity {
         // Hide Keyboard
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-//        init();
+        init();
     }
 
-//    private void init() {
-//        // Login button Click Event
-//        btnLogin.setOnClickListener(view -> {
-//            // Hide Keyboard
-//            Functions.hideSoftKeyboard(LoginActivity.this);
-//
-//            String email = Objects.requireNonNull(inputEmail.getEditText()).getText().toString().trim();
-//            String password = Objects.requireNonNull(inputPassword.getEditText()).getText().toString().trim();
-//
-//            // Check for empty data in the form
-//            if (!email.isEmpty() && !password.isEmpty()) {
-//                if (Functions.isValidEmailAddress(email)) {
-//                    // login user
+    private void init() {
+        // Login button Click Event
+        btnLogin.setOnClickListener(view -> {
+            // Hide Keyboard
+            Functions.hideSoftKeyboard(LoginActivity.this);
+
+            String email = Objects.requireNonNull(inputEmail.getEditText()).getText().toString().trim();
+            String password = Objects.requireNonNull(inputPassword.getEditText()).getText().toString().trim();
+
+            // Check for empty data in the form
+            if (!email.isEmpty() && !password.isEmpty()) {
+                if (Functions.isValidEmailAddress(email)) {
+                    // login user
 //                    loginProcess(email, password);
-//                } else {
-//                    Toast.makeText(getApplicationContext(), "Email is not valid!", Toast.LENGTH_SHORT).show();
-//                }
-//            } else {
-//                // Prompt user to enter credentials
-//                Toast.makeText(getApplicationContext(), "Please enter the credentials!", Toast.LENGTH_LONG).show();
-//            }
-//        });
-//
-//        // Link to Register Screen
-//        btnLinkToRegister.setOnClickListener(view -> {
-//            Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
-//            startActivity(i);
-//        });
-//
-//        // Forgot Password Dialog
-//        btnForgotPass.setOnClickListener(v -> forgotPasswordDialog());
-//    }
-//
-//    private void forgotPasswordDialog() {
-//        View dialogView = getLayoutInflater().inflate(R.layout.reset_password, null);
-//
-//        AlertDialog alertDialog = new AlertDialog.Builder(this)
-//                .setView(dialogView)
-//                .setTitle("Forgot Password")
-//                .setCancelable(false)
-//                .setPositiveButton("Reset", (dialog, which) -> {})
-//                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-//                .create();
-//
-//        TextInputLayout mEditEmail = dialogView.findViewById(R.id.edit_email);
-//
-//        Objects.requireNonNull(mEditEmail.getEditText()).addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                if(mEditEmail.getEditText().getText().length() > 0){
-//                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
-//                } else {
-//                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
-//                }
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//            }
-//        });
-//
-//        alertDialog.setOnShowListener(dialog -> {
-//            final Button b = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-//            b.setEnabled(false);
-//
-//            b.setOnClickListener(view -> {
-//                String email = mEditEmail.getEditText().getText().toString();
-//
-//                if (!email.isEmpty()) {
-//                    if (Functions.isValidEmailAddress(email)) {
+
+                    // only for me ---
+                    Intent upanel = new Intent(LoginActivity.this, HomeActivity.class);
+                                upanel.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(upanel);
+                    // ---
+                } else {
+                    Toast.makeText(getApplicationContext(), "Email is not valid!", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                // Prompt user to enter credentials
+                Toast.makeText(getApplicationContext(), "Please enter the credentials!", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        // Link to Register Screen
+        btnLinkToRegister.setOnClickListener(view -> {
+            Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
+            startActivity(i);
+        });
+
+        // Forgot Password Dialog
+        btnForgotPass.setOnClickListener(v -> forgotPasswordDialog());
+    }
+
+    private void forgotPasswordDialog() {
+        View dialogView = getLayoutInflater().inflate(R.layout.reset_password, null);
+
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setView(dialogView)
+                .setTitle("Forgot Password")
+                .setCancelable(false)
+                .setPositiveButton("Reset", (dialog, which) -> {})
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .create();
+
+        TextInputLayout mEditEmail = dialogView.findViewById(R.id.edit_email);
+
+        Objects.requireNonNull(mEditEmail.getEditText()).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(mEditEmail.getEditText().getText().length() > 0){
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
+                } else {
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        alertDialog.setOnShowListener(dialog -> {
+            final Button b = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            b.setEnabled(false);
+
+            b.setOnClickListener(view -> {
+                String email = mEditEmail.getEditText().getText().toString();
+
+                if (!email.isEmpty()) {
+                    if (Functions.isValidEmailAddress(email)) {
 //                        resetPassword(email);
-//                        dialog.dismiss();
-//                    } else {
-//                        Toast.makeText(getApplicationContext(), "Email is not valid!", Toast.LENGTH_SHORT).show();
-//                    }
-//                } else {
-//                    Toast.makeText(getApplicationContext(), "Fill all values!", Toast.LENGTH_SHORT).show();
-//                }
-//
-//            });
-//        });
-//
-//        alertDialog.show();
-//    }
+                        dialog.dismiss();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Email is not valid!", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "Fill all values!", Toast.LENGTH_SHORT).show();
+                }
+
+            });
+        });
+
+        alertDialog.show();
+    }
 //
 //    private void loginProcess(final String email, final String password) {
 //        // Tag used to cancel the request

@@ -1,19 +1,19 @@
 package com.example.mobile_security_project.screens;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mobile_security_project.R;
+import com.example.mobile_security_project.utils.Functions;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
-/**
- * Created by Akshay Raj on 6/16/2016.
- * akshay@snowcorp.org
- * www.snowcorp.org
- */
+import java.util.Objects;
+
 
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
@@ -35,38 +35,49 @@ public class RegisterActivity extends AppCompatActivity {
         // Hide Keyboard
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-//        init();
+        init();
     }
 
-//    private void init() {
-//        // Login button Click Event
-//        btnRegister.setOnClickListener(view -> {
-//            // Hide Keyboard
-//            Functions.hideSoftKeyboard(RegisterActivity.this);
-//
-//            String name = Objects.requireNonNull(inputName.getEditText()).getText().toString().trim();
-//            String email = Objects.requireNonNull(inputEmail.getEditText()).getText().toString().trim();
-//            String password = Objects.requireNonNull(inputPassword.getEditText()).getText().toString().trim();
-//
-//            // Check for empty data in the form
-//            if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
-//                if (Functions.isValidEmailAddress(email)) {
+    private void init() {
+        // Login button Click Event
+        btnRegister.setOnClickListener(view -> {
+            // Hide Keyboard
+            Functions.hideSoftKeyboard(RegisterActivity.this);
+
+            String name = Objects.requireNonNull(inputName.getEditText()).getText().toString().trim();
+            String email = Objects.requireNonNull(inputEmail.getEditText()).getText().toString().trim();
+            String password = Objects.requireNonNull(inputPassword.getEditText()).getText().toString().trim();
+
+            // Check for empty data in the form
+            if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
+                if (Functions.isValidEmailAddress(email)) {
 //                    registerUser(name, email, password);
-//                } else {
-//                    Toast.makeText(getApplicationContext(), "Email is not valid!", Toast.LENGTH_SHORT).show();
-//                }
-//            } else {
-//                Toast.makeText(getApplicationContext(), "Please enter your details!", Toast.LENGTH_LONG).show();
-//            }
-//        });
-//
-//        // Link to Register Screen
-//        btnLinkToLogin.setOnClickListener(view -> {
-//            Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
-//            startActivity(i);
-//            finish();
-//        });
-//    }
+
+                    // only for me ---
+                    Bundle b = new Bundle();
+                    b.putString("email", email);
+                    Intent i = new Intent(RegisterActivity.this, EmailVerify.class);
+                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    i.putExtras(b);
+                    startActivity(i);
+                    finish();
+                    // ---
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "Email is not valid!", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), "Please enter your details!", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        // Link to Register Screen
+        btnLinkToLogin.setOnClickListener(view -> {
+            Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
+            startActivity(i);
+            finish();
+        });
+    }
 //
 //    private void registerUser(final String name, final String email, final String password) {
 //        // Tag used to cancel the request

@@ -3,12 +3,6 @@ package com.example.mobile_security_project.screens;
 import android.app.Application;
 
 
-/**
- * Created by Akshay Raj on 6/16/2016.
- * akshay@snowcorp.org
- * www.snowcorp.org
- */
-
 public class MyApplication extends Application {
     public static final String TAG = MyApplication.class.getSimpleName();
 //    private RequestQueue mRequestQueue;

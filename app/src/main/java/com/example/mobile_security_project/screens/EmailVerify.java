@@ -1,20 +1,22 @@
 package com.example.mobile_security_project.screens;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mobile_security_project.R;
+import com.example.mobile_security_project.utils.Functions;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
-/**
- * Created by Akshay Raj on 06-02-2017.
- * akshay@snowcorp.org
- * www.snowcorp.org
- */
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
 public class EmailVerify extends AppCompatActivity {
     private static final String TAG = EmailVerify.class.getSimpleName();
 
@@ -50,52 +52,52 @@ public class EmailVerify extends AppCompatActivity {
         // Hide Keyboard
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-//        init();
+        init();
     }
 
-//    private void init() {
-//        btnVerify.setOnClickListener(v -> {
-//            // Hide Keyboard
-//            Functions.hideSoftKeyboard(EmailVerify.this);
-//
-//            String email = bundle.getString("email");
-//            String otp = Objects.requireNonNull(textVerifyCode.getEditText()).getText().toString();
-//
-//            if (!otp.isEmpty()) {
+    private void init() {
+        btnVerify.setOnClickListener(v -> {
+            // Hide Keyboard
+            Functions.hideSoftKeyboard(EmailVerify.this);
+
+            String email = bundle.getString("email");
+            String otp = Objects.requireNonNull(textVerifyCode.getEditText()).getText().toString();
+
+            if (!otp.isEmpty()) {
 //                verifyCode(email, otp);
-//                textVerifyCode.setErrorEnabled(false);
-//            } else {
-//                textVerifyCode.setError("Please enter verification code");
-//            }
-//        });
-//
-//        btnResend.setEnabled(false);
-//        btnResend.setOnClickListener(v -> {
-//            String email = bundle.getString("email");
+                textVerifyCode.setErrorEnabled(false);
+            } else {
+                textVerifyCode.setError("Please enter verification code");
+            }
+        });
+
+        btnResend.setEnabled(false);
+        btnResend.setOnClickListener(v -> {
+            String email = bundle.getString("email");
 //            resendCode(email);
-//        });
-//
-//        countDown();
-//    }
-//
-//    private void countDown() {
-//        new CountDownTimer(70000, 1000) { // adjust the milli seconds here
-//
-//            @SuppressLint({"SetTextI18n", "DefaultLocale"})
-//            public void onTick(long millisUntilFinished) {
-//                otpCountDown.setVisibility(View.VISIBLE);
-//                otpCountDown.setText(""+String.format(FORMAT,
-//                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
-//                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(
-//                                TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)) ));
-//            }
-//
-//            public void onFinish() {
-//                otpCountDown.setVisibility(View.GONE);
-//                btnResend.setEnabled(true);
-//            }
-//        }.start();
-//    }
+        });
+
+        countDown();
+    }
+
+    private void countDown() {
+        new CountDownTimer(70000, 1000) { // adjust the milli seconds here
+
+            @SuppressLint({"SetTextI18n", "DefaultLocale"})
+            public void onTick(long millisUntilFinished) {
+                otpCountDown.setVisibility(View.VISIBLE);
+                otpCountDown.setText(""+String.format(FORMAT,
+                        TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished),
+                        TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(
+                                TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)) ));
+            }
+
+            public void onFinish() {
+                otpCountDown.setVisibility(View.GONE);
+                btnResend.setEnabled(true);
+            }
+        }.start();
+    }
 //
 //    private void verifyCode(final String email, final String otp) {
 //        // Tag used to cancel the request
