@@ -15,8 +15,10 @@ import org.json.JSONObject;
 
 
 public class Functions {
-
-    public static String IP = "192.168.1.4";
+    // cmd -> ipconfig
+    // Wired : Ethernet adapter || Ethernet 4 -> IPv4 =====> IP
+    // Wifi : Wireless LAN adapter || Wi-Fi -> IPv4 =====> IP 
+    public static String IP = "192.168.176.1";
     public static String ZOO_ROUT = "http://" + IP + ":3006/";
 
 
