@@ -13,6 +13,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.Mobile_Security_Project">
         <activity
             android:name=".screens.LoginActivity"
@@ -40,15 +41,6 @@
                 android:value=".screens.LoginActivity" />
         </activity>
 
-        <activity
-            android:name=".screens.EmailVerify"
-            android:label="@string/app_name"
-            android:parentActivityName=".screens.LoginActivity"
-            android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".screens.LoginActivity" />
-        </activity>
     </application>
 
 </manifest>

@@ -2,21 +2,35 @@ package com.example.mobile_security_project.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.authenticationlibrary.Authentication;
+import com.example.authenticationlibrary.model.User;
+import com.example.authenticationlibrary.retrofit.CallBack;
 import com.example.mobile_security_project.R;
 import com.example.mobile_security_project.utils.Functions;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputLayout;
 
+import org.jetbrains.annotations.NotNull;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.Objects;
+
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
+    public final static String USER = "user";
 
     private MaterialButton btnRegister, btnLinkToLogin;
     private TextInputLayout inputName, inputEmail, inputPassword;
@@ -41,8 +55,6 @@ public class RegisterActivity extends AppCompatActivity {
     private void init() {
         // Login button Click Event
         btnRegister.setOnClickListener(view -> {
-            // Hide Keyboard
-            Functions.hideSoftKeyboard(RegisterActivity.this);
 
             String name = Objects.requireNonNull(inputName.getEditText()).getText().toString().trim();
             String email = Objects.requireNonNull(inputEmail.getEditText()).getText().toString().trim();
@@ -51,23 +63,16 @@ public class RegisterActivity extends AppCompatActivity {
             // Check for empty data in the form
             if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
                 if (Functions.isValidEmailAddress(email)) {
-//                    registerUser(name, email, password);
-
-                    // only for me ---
-                    Bundle b = new Bundle();
-                    b.putString("email", email);
-                    Intent i = new Intent(RegisterActivity.this, EmailVerify.class);
-                    i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    i.putExtras(b);
-                    startActivity(i);
-                    finish();
-                    // ---
-
+                    registerUser(email, password, name);
                 } else {
                     Toast.makeText(getApplicationContext(), "Email is not valid!", Toast.LENGTH_SHORT).show();
+                    // Hide Keyboard
+                    Functions.hideSoftKeyboard(RegisterActivity.this);
                 }
             } else {
                 Toast.makeText(getApplicationContext(), "Please enter your details!", Toast.LENGTH_LONG).show();
+                // Hide Keyboard
+                Functions.hideSoftKeyboard(RegisterActivity.this);
             }
         });
 
@@ -78,71 +83,60 @@ public class RegisterActivity extends AppCompatActivity {
             finish();
         });
     }
-//
-//    private void registerUser(final String name, final String email, final String password) {
-//        // Tag used to cancel the request
-//        String tag_string_req = "req_register";
-//
-//        showDialog();
-//
-//        StringRequest strReq = new StringRequest(Request.Method.POST,
-//                Functions.REGISTER_URL, response -> {
-//                    Log.d(TAG, "Register Response: " + response);
-//                    hideDialog();
-//
-//                    try {
-//                        JSONObject jObj = new JSONObject(response);
-//                        boolean error = jObj.getBoolean("error");
-//                        if (!error) {
-//                            Functions logout = new Functions();
-//                            logout.logoutUser(getApplicationContext());
-//
-//                            Bundle b = new Bundle();
-//                            b.putString("email", email);
-//                            Intent i = new Intent(RegisterActivity.this, EmailVerify.class);
-//                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                            i.putExtras(b);
-//                            startActivity(i);
-//                            finish();
-//
-//                        } else {
-//                            // Error occurred in registration. Get the error
-//                            // message
-//                            String errorMsg = jObj.getString("message");
-//                            Toast.makeText(getApplicationContext(),errorMsg, Toast.LENGTH_LONG).show();
-//                        }
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                }, error -> {
-//                    Log.e(TAG, "Registration Error: " + error.getMessage(), error);
-//                    Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-//                    hideDialog();
-//                }) {
-//
-//            @Override
-//            protected Map<String, String> getParams() {
-//                // Posting params to register url
-//                Map<String, String> params = new HashMap<>();
-//                params.put("name", name);
-//                params.put("email", email);
-//                params.put("password", password);
-//
-//                return params;
-//            }
-//
-//        };
-//
-//        // Adding request to request queue
-//        MyApplication.getInstance().addToRequestQueue(strReq, tag_string_req);
-//    }
-//
-//    private void showDialog() {
-//        Functions.showProgressDialog(RegisterActivity.this, "Registering ...");
-//    }
-//
-//    private void hideDialog() {
-//        Functions.hideProgressDialog(RegisterActivity.this);
-//    }
+
+    private void registerUser(String email, String password, String fullName){
+        Authentication auth = new Authentication(Functions.IP);
+        auth.register(this, email, password, fullName, new CallBack() {
+            @Override
+            public void onSuccess(@NonNull @NotNull Response value) {
+                System.out.println(value.toString());
+                ResponseBody responseData = value.body();
+                Log.e(TAG, "onResponse: " + responseData);
+                try {
+                    JSONObject jsonObject = new JSONObject(responseData.string());
+                    User user = convertJSONObjectToUser(jsonObject);
+                    auth.login(RegisterActivity.this, user.getEmail(), password, new CallBack() {
+                        @Override
+                        public void onSuccess(@NonNull @NotNull Response value) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(value.body().string());
+                                String accessToken = jsonObject.getString("accessToken");
+                                Functions.saveAccessToken(RegisterActivity.this, accessToken);
+                                Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                                finish();
+                            } catch (JSONException | IOException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+
+                        @Override
+                        public void onError(@NonNull @NotNull Throwable throwable) {
+                        }
+                    });
+                } catch (JSONException | IOException ignored) { }
+            }
+
+            @Override
+            public void onError(@NonNull @NotNull Throwable throwable) {
+                System.out.println("failed");
+            }
+        });
+    }
+
+    private User convertJSONObjectToUser(JSONObject jsonObject) {
+        User user = null;
+        try {
+            user = new User(
+                    jsonObject.getString("email"),
+                    jsonObject.getString("fullName")
+            );
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
 }

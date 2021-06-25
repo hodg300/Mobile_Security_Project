@@ -2,6 +2,7 @@ package com.example.mobile_security_project.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,38 +10,16 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 public class Functions {
 
-    //Main URL
-    private static String MAIN_URL = "http://192.168.43.65/android_login/";
-
-    // Login URL
-    public static String LOGIN_URL = MAIN_URL + "login.php";
-
-    // Register URL
-    public static String REGISTER_URL = MAIN_URL + "register.php";
-
-    // OTP Verification
-    public static String OTP_VERIFY_URL = MAIN_URL + "verification.php";
-
-    // Forgot Password
-    public static String RESET_PASS_URL = MAIN_URL + "reset-password.php";
+    public static String IP = "192.168.1.4";
+    public static String ZOO_ROUT = "http://" + IP + ":3006/";
 
 
-    /**
-     * Function to logout user
-     * Resets the temporary data stored in SQLite Database
-     * */
-//    public void logoutUser(Context context){
-//        DatabaseHandler db = new DatabaseHandler(context);
-//        db.resetTables();
-//    }
-
-    /**
-     *  Email Address Validation
-     */
     public static boolean isValidEmailAddress(String email) {
         String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
         java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
@@ -48,9 +27,6 @@ public class Functions {
         return m.matches();
     }
 
-    /**
-     *  Hide Keyboard
-     */
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager =
                 (InputMethodManager) activity.getSystemService(
@@ -58,12 +34,7 @@ public class Functions {
         inputMethodManager.hideSoftInputFromWindow(
                 activity.getCurrentFocus().getWindowToken(), 0);
     }
-//
-//    public static void showProgressDialog(Context context, String title) {
-//        FragmentManager fm = ((AppCompatActivity)context).getSupportFragmentManager();
-//        DialogFragment newFragment = ProgressBarDialog.newInstance(title);
-//        newFragment.show(fm, "dialog");
-//    }
+
 
     public static void hideProgressDialog(Context context) {
         FragmentManager fm = ((AppCompatActivity)context).getSupportFragmentManager();
@@ -73,4 +44,37 @@ public class Functions {
             df.dismiss();
         }
     }
+
+
+    public static void saveAccessToken(Context context, String accessToken){
+        SharedPreferences pref = context.getSharedPreferences("MyPref", 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("access_token", accessToken);
+        editor.commit();
+    }
+
+
+    public static String getAccessToken(Context context){
+        SharedPreferences pref = context.getSharedPreferences("MyPref", 0);
+        return pref.getString("access_token", null);
+    }
+
+    public static void deleteAccessToken(Context context){
+        SharedPreferences pref = context.getSharedPreferences("MyPref", 0);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.remove("access_token");
+        editor.commit();
+    }
+
+    public static String convertJSONObjectToAccessToken(JSONObject jsonObject) {
+        String accessToken = null;
+        try {
+            accessToken = jsonObject.getString("accessToken");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return accessToken;
+    }
+
+
 }
