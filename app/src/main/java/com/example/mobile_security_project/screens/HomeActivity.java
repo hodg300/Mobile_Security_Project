@@ -37,7 +37,7 @@ import okhttp3.ResponseBody;
 
 
 public class HomeActivity extends AppCompatActivity {
-    private MaterialButton btnLogout;
+    private MaterialButton btnLogout, btnAddAnimal;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private List<ListItem> listItem;
@@ -51,7 +51,7 @@ public class HomeActivity extends AppCompatActivity {
 
         auth = new Authentication(Functions.IP);
         btnLogout = findViewById(R.id.logout);
-
+        btnAddAnimal = findViewById(R.id.add_btn);
         recyclerView = findViewById(R.id.recyclerViewAnimals);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -131,6 +131,13 @@ public class HomeActivity extends AppCompatActivity {
 
     private void init() {
         btnLogout.setOnClickListener(v -> logoutUser());
+        btnAddAnimal.setOnClickListener(v -> goToAddAnimalForm());
+
+    }
+
+    private void goToAddAnimalForm() {
+        Intent intent = new Intent(HomeActivity.this, FormActivity.class);
+        startActivity(intent);
     }
 
     private void logoutUser() {

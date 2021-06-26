@@ -12,4 +12,11 @@
     <string name="change_password">Change Password</string>
     <string name="old_password">Old Password</string>
     <string name="new_password">New Password</string>
+    <string name="create">Create</string>
+    <string name="type">Type</string>
+    <string name="name">Name</string>
+    <string name="age">Age</string>
+    <string name="image_url">Image URL</string>
+    <string name="add_animal">Add Animal</string>
+    <string name="add">Add Animal</string>
 </resources>

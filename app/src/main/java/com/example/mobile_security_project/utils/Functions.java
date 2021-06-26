@@ -3,7 +3,10 @@ package com.example.mobile_security_project.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
@@ -17,9 +20,11 @@ import org.json.JSONObject;
 public class Functions {
     // cmd -> ipconfig
     // Wired : Ethernet adapter || Ethernet 4 -> IPv4 =====> IP
-    // Wifi : Wireless LAN adapter || Wi-Fi -> IPv4 =====> IP 
+    // Wifi : Wireless LAN adapter || Wi-Fi -> IPv4 =====> IP
     public static String IP = "192.168.176.1";
     public static String ZOO_ROUT = "http://" + IP + ":3006/";
+    public static String ZOO_ROUT_CREATE_ANIMAL = ZOO_ROUT + "create-animal";
+
 
 
     public static boolean isValidEmailAddress(String email) {
@@ -38,14 +43,6 @@ public class Functions {
     }
 
 
-    public static void hideProgressDialog(Context context) {
-        FragmentManager fm = ((AppCompatActivity)context).getSupportFragmentManager();
-        Fragment prev = fm.findFragmentByTag("dialog");
-        if (prev != null) {
-            DialogFragment df = (DialogFragment) prev;
-            df.dismiss();
-        }
-    }
 
 
     public static void saveAccessToken(Context context, String accessToken){
@@ -76,6 +73,16 @@ public class Functions {
             e.printStackTrace();
         }
         return accessToken;
+    }
+
+    public static void showToast(Context context, String message){
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(context,
+                        message, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 
