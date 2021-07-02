@@ -93,7 +93,11 @@ public class FormActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 progressDialog.dismiss();
-                Functions.showToast(FormActivity.this, "The animal was not added successfully");
+                Functions.showToast(FormActivity.this,"Session expired");
+                Intent intent = new Intent(FormActivity.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
             }
 
             @Override

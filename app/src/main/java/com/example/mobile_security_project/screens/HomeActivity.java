@@ -87,6 +87,11 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 progressDialog.dismiss();
+                Functions.showToast(HomeActivity.this,"Session expired");
+                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
             }
 
             @Override
