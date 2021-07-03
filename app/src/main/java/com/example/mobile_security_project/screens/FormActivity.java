@@ -93,21 +93,24 @@ public class FormActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 progressDialog.dismiss();
-                Functions.showToast(FormActivity.this,"Session expired");
-                Intent intent = new Intent(FormActivity.this, LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                finish();
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 progressDialog.dismiss();
-                Functions.showToast(FormActivity.this, "The animal was added successfully");
-                Intent intent = new Intent(FormActivity.this,HomeActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
-                startActivity(intent);
-                FormActivity.this.finish();
+                if(response.isSuccessful() && response.body() != null) {
+                    Functions.showToast(FormActivity.this, "The animal was added successfully");
+                    Intent intent = new Intent(FormActivity.this, HomeActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_TASK_ON_HOME);
+                    startActivity(intent);
+                    FormActivity.this.finish();
+                }else{
+                    Functions.showToast(FormActivity.this,"Session expired");
+                    Intent intent = new Intent(FormActivity.this, LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+                }
             }
         });
     }

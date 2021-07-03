@@ -87,16 +87,12 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 progressDialog.dismiss();
-                Functions.showToast(HomeActivity.this,"Session expired");
-                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                finish();
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 progressDialog.dismiss();
+                System.out.println("here2");
                 if(response.isSuccessful() && response.body() != null) {
                     ResponseBody responseData = response.body();
                     try {
@@ -105,6 +101,13 @@ public class HomeActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                }else{
+                    System.out.println("here1");
+                    Functions.showToast(HomeActivity.this,"Session expired");
+                    Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
                 }
             }
         });
