@@ -19,9 +19,9 @@ import org.json.JSONObject;
 
 public class Functions {
     // cmd -> ipconfig
-    // Wired : Ethernet adapter || Ethernet 4 -> IPv4 =====> IP
+    // Wired : Ethernet adapter || Ethernet -> IPv4 =====> IP
     // Wifi : Wireless LAN adapter || Wi-Fi -> IPv4 =====> IP
-    public static String IP = "192.168.176.1";
+    public static String IP = "192.168.50.228";
     public static String ZOO_ROUT = "http://" + IP + ":3006/";
     public static String ZOO_ROUT_CREATE_ANIMAL = ZOO_ROUT + "create-animal";
 
